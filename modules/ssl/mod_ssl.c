@@ -152,6 +152,18 @@ static const command_rec ssl_config_cmds[] = {
                 "Set user name to SSL variable value")
     SSL_CMD_SRV(StrictSNIVHostCheck, FLAG,
                 "Strict SNI virtual host checking")
+#ifndef OPENSSL_NO_TLSEXT
+#ifndef OPENSSL_NO_TACK	
+	SSL_CMD_SRV(TACKExtension, FLAG, 
+				"Respond with TACK Extension when requested")
+    SSL_CMD_SRV(TACKFile, TAKE1,
+                "TACK file "
+                "(`/path/to/file' - PEM encoded)")
+    SSL_CMD_SRV(TACKBreakSigsFile, TAKE1,
+                "TACK Break Signatures file "
+                "(`/path/to/file' - contains PEM encoded files)")
+#endif
+#endif
 
     /*
      * Proxy configuration for remote SSL connections

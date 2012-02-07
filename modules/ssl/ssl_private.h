@@ -419,6 +419,14 @@ typedef struct {
      * sent in the CertificateRequest message: */
     const char  *ca_name_path;
     const char  *ca_name_file;
+
+#ifndef OPENSSL_NO_TLSEXT
+#ifndef OPENSSL_NO_TACK	
+	BOOL tack_extension;
+	const char *tack_file;
+	const char *tack_break_sigs_file;
+#endif
+#endif
 } modssl_pk_server_t;
 
 typedef struct {
@@ -570,6 +578,14 @@ const char  *ssl_cmd_SSLProxyCheckPeerExpire(cmd_parms *cmd, void *dcfg, int fla
 const char  *ssl_cmd_SSLProxyCheckPeerCN(cmd_parms *cmd, void *dcfg, int flag);
 
 const char *ssl_cmd_SSLFIPS(cmd_parms *cmd, void *dcfg, int flag);
+
+#ifndef OPENSSL_NO_TLSEXT
+#ifndef OPENSSL_NO_TACK	
+const char  *ssl_cmd_SSLTACKExtension(cmd_parms *, void *dcfg, int flag);
+const char  *ssl_cmd_SSLTACKFile(cmd_parms *, void *, const char *);
+const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *, void *, const char *);
+#endif
+#endif
 
 /**  module initialization  */
 int          ssl_init_Module(apr_pool_t *, apr_pool_t *, apr_pool_t *, server_rec *);

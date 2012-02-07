@@ -432,6 +432,20 @@ static void ssl_init_ctx_tls_extensions(server_rec *s,
         ssl_log_ssl_error(APLOG_MARK, APLOG_ERR, s);
         ssl_die();
     }
+
+#ifndef OPENSSL_NO_TACK
+	if (mctx->pks->tack_extension) {
+		if (!SSL_CTX_use_tack_files(mctx->ssl_ctx, 
+				mctx->pks->tack_file, 
+				mctx->pks->tack_break_sigs_file)) {
+	        ap_log_error(APLOG_MARK, APLOG_ERR, 0, s,
+	                     "Unable to initialize TLS TACK extension "
+	                     "(incompatible OpenSSL version?)");
+	        ssl_log_ssl_error(APLOG_MARK, APLOG_ERR, s);
+	        ssl_die();					
+		}
+	}
+#endif
 }
 #endif
 

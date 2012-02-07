@@ -250,6 +250,14 @@ static void modssl_ctx_cfg_merge_server(modssl_ctx_t *base,
 
     cfgMergeString(pks->ca_name_path);
     cfgMergeString(pks->ca_name_file);
+
+#ifndef OPENSSL_NO_TLSEXT
+#ifndef OPENSSL_NO_TACK
+	cfgMergeBool(pks->tack_extension);
+    cfgMergeString(pks->tack_file);
+    cfgMergeString(pks->tack_break_sigs_file);
+#endif
+#endif
 }
 
 /*
@@ -1519,6 +1527,47 @@ const char  *ssl_cmd_SSLStrictSNIVHostCheck(cmd_parms *cmd, void *dcfg, int flag
            "documentation, and build a compatible version of OpenSSL.";
 #endif
 }
+
+#ifndef OPENSSL_NO_TLSEXT
+#ifndef OPENSSL_NO_TACK	
+
+const char  *ssl_cmd_SSLTACKExtension(cmd_parms *cmd, void *dcfg, int flag)
+{
+	SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+    sc->server->pks->tack_extension = flag?TRUE:FALSE;
+    return NULL;
+}
+
+const char  *ssl_cmd_SSLTACKFile(cmd_parms *cmd, void *dcfg, const char *arg)
+{
+    SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+    const char *err;
+
+    if ((err = ssl_cmd_check_file(cmd, &arg))) {
+        return err;
+    }
+
+    sc->server->pks->tack_file = arg;
+
+    return NULL;
+}
+
+const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *cmd, void *dcfg, const char *arg)
+{
+    SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+    const char *err;
+
+    if ((err = ssl_cmd_check_file(cmd, &arg))) {
+        return err;
+    }
+
+    sc->server->pks->tack_break_sigs_file = arg;
+
+    return NULL;
+}
+
+#endif
+#endif
 
 void ssl_hook_ConfigTest(apr_pool_t *pconf, server_rec *s)
 {
