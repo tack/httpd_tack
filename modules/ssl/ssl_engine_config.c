@@ -253,9 +253,9 @@ static void modssl_ctx_cfg_merge_server(modssl_ctx_t *base,
 
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK
-	cfgMergeBool(pks->tack_extension);
     cfgMergeString(pks->tack_file);
     cfgMergeString(pks->tack_break_sigs_file);
+	cfgMergeBool(pks->tack_pin_activation);
 #endif
 #endif
 }
@@ -1531,13 +1531,6 @@ const char  *ssl_cmd_SSLStrictSNIVHostCheck(cmd_parms *cmd, void *dcfg, int flag
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK	
 
-const char  *ssl_cmd_SSLTACKExtension(cmd_parms *cmd, void *dcfg, int flag)
-{
-	SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
-    sc->server->pks->tack_extension = flag?TRUE:FALSE;
-    return NULL;
-}
-
 const char  *ssl_cmd_SSLTACKFile(cmd_parms *cmd, void *dcfg, const char *arg)
 {
     SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
@@ -1563,6 +1556,13 @@ const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *cmd, void *dcfg, const char
 
     sc->server->pks->tack_break_sigs_file = arg;
 
+    return NULL;
+}
+
+const char  *ssl_cmd_SSLTACKPinActivation(cmd_parms *cmd, void *dcfg, int flag)
+{
+	SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+    sc->server->pks->tack_pin_activation = flag?TRUE:FALSE;
     return NULL;
 }
 

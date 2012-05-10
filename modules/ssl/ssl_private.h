@@ -422,9 +422,9 @@ typedef struct {
 
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK	
-	BOOL tack_extension;
 	const char *tack_file;
 	const char *tack_break_sigs_file;
+	BOOL tack_pin_activation;
 #endif
 #endif
 } modssl_pk_server_t;
@@ -581,9 +581,9 @@ const char *ssl_cmd_SSLFIPS(cmd_parms *cmd, void *dcfg, int flag);
 
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK	
-const char  *ssl_cmd_SSLTACKExtension(cmd_parms *, void *dcfg, int flag);
 const char  *ssl_cmd_SSLTACKFile(cmd_parms *, void *, const char *);
 const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *, void *, const char *);
+const char  *ssl_cmd_SSLTACKPinActivation(cmd_parms *, void *dcfg, int flag);
 #endif
 #endif
 
