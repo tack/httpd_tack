@@ -253,9 +253,9 @@ static void modssl_ctx_cfg_merge_server(modssl_ctx_t *base,
 
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK
-    cfgMergeString(pks->tack_file);
-    cfgMergeString(pks->tack_break_sigs_file);
-	cfgMergeBool(pks->tack_pin_activation);
+    cfgMergeString(pks->tack_tack_file);
+    cfgMergeString(pks->tack_break_sig_file);
+	cfgMergeBool(pks->tack_activation_flags);
 #endif
 #endif
 }
@@ -1531,7 +1531,7 @@ const char  *ssl_cmd_SSLStrictSNIVHostCheck(cmd_parms *cmd, void *dcfg, int flag
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK	
 
-const char  *ssl_cmd_SSLTACKFile(cmd_parms *cmd, void *dcfg, const char *arg)
+const char  *ssl_cmd_SSLTACKTackFile(cmd_parms *cmd, void *dcfg, const char *arg)
 {
     SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
     const char *err;
@@ -1540,12 +1540,12 @@ const char  *ssl_cmd_SSLTACKFile(cmd_parms *cmd, void *dcfg, const char *arg)
         return err;
     }
 
-    sc->server->pks->tack_file = arg;
+    sc->server->pks->tack_tack_file = arg;
 
     return NULL;
 }
 
-const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *cmd, void *dcfg, const char *arg)
+const char  *ssl_cmd_SSLTACKBreakSigFile(cmd_parms *cmd, void *dcfg, const char *arg)
 {
     SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
     const char *err;
@@ -1554,15 +1554,36 @@ const char  *ssl_cmd_SSLTACKBreakSigsFile(cmd_parms *cmd, void *dcfg, const char
         return err;
     }
 
-    sc->server->pks->tack_break_sigs_file = arg;
+    sc->server->pks->tack_break_sig_file = arg;
 
     return NULL;
 }
 
-const char  *ssl_cmd_SSLTACKPinActivation(cmd_parms *cmd, void *dcfg, int flag)
+static const char *ssl_cmd_activation_flags_parse(cmd_parms *parms,
+                                              	const char *arg,
+                                              	int *flags)
+{
+	*flags = atoi(arg);
+    if ( ((*flags) >= 0) && ((*flags) <= 3) ) {
+        return NULL;
+    }
+
+    return apr_pstrcat(parms->temp_pool, parms->cmd->name,
+                       ": Invalid argument '", arg, "'",
+                       NULL);
+}
+
+const char  *ssl_cmd_SSLTACKActivationFlags(cmd_parms *cmd, void *dcfg, const char *arg)
 {
 	SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
-    sc->server->pks->tack_pin_activation = flag?TRUE:FALSE;
+    int flags;
+    const char *err;
+
+    if ((err = ssl_cmd_activation_flags_parse(cmd, arg, &flags))) {
+        return err;
+    }
+
+    sc->server->pks->tack_activation_flags = flags;
     return NULL;
 }
 

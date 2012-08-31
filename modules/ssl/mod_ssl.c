@@ -154,14 +154,14 @@ static const command_rec ssl_config_cmds[] = {
                 "Strict SNI virtual host checking")
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK	
-    SSL_CMD_SRV(TACKFile, TAKE1,
+    SSL_CMD_SRV(TACKTackFile, TAKE1,
                 "TACK file "
-                "(`/path/to/file' - PEM encoded)")
-    SSL_CMD_SRV(TACKBreakSigsFile, TAKE1,
-                "TACK Break Signatures file "
-                "(`/path/to/file' - contains PEM encoded files)")
-	SSL_CMD_SRV(TACKPinActivation, FLAG, 
-				"Enable pin activation for the TACK")
+                "(`/path/to/file' - PEM encoded Tack files)")
+    SSL_CMD_SRV(TACKBreakSigFile, TAKE1,
+                "TACK Break Signature file "
+                "(`/path/to/file' - PEM encoded Break Sig files)")
+	SSL_CMD_SRV(TACKActivationFlags, TAKE1, 
+				"Enable activation flags for the tacks")
 #endif
 #endif
 
