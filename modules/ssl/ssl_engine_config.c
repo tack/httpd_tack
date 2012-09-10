@@ -254,8 +254,7 @@ static void modssl_ctx_cfg_merge_server(modssl_ctx_t *base,
 #ifndef OPENSSL_NO_TLSEXT
 #ifndef OPENSSL_NO_TACK
     cfgMergeString(pks->tack_tack_file);
-    cfgMergeString(pks->tack_break_sig_file);
-	cfgMergeBool(pks->tack_activation_flags);
+    cfgMergeBool(pks->tack_activation_flags);
 #endif
 #endif
 }
@@ -1541,20 +1540,6 @@ const char  *ssl_cmd_SSLTACKTackFile(cmd_parms *cmd, void *dcfg, const char *arg
     }
 
     sc->server->pks->tack_tack_file = arg;
-
-    return NULL;
-}
-
-const char  *ssl_cmd_SSLTACKBreakSigFile(cmd_parms *cmd, void *dcfg, const char *arg)
-{
-    SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
-    const char *err;
-
-    if ((err = ssl_cmd_check_file(cmd, &arg))) {
-        return err;
-    }
-
-    sc->server->pks->tack_break_sig_file = arg;
 
     return NULL;
 }
