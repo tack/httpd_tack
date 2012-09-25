@@ -435,7 +435,7 @@ static void ssl_init_ctx_tls_extensions(server_rec *s,
 
 #ifndef OPENSSL_NO_TACK
 	if (mctx->pks->tack_tack_file) {
-		if (!SSL_CTX_use_tack_files(mctx->ssl_ctx, 
+		if (!SSL_CTX_use_tack_file(mctx->ssl_ctx, 
 				mctx->pks->tack_tack_file, 
 				mctx->pks->tack_activation_flags)) {
 	        ap_log_error(APLOG_MARK, APLOG_ERR, 0, s,
